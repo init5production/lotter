@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  juggler:
+    container_name: lotter-juggler
+    image: lotter/juggler-wildfly
+    build: ./juggler-wildfly
+    ports:
+      - 8081:8080
+      - 8788:8787
+      - 9991:9990
+    networks:
+      - lotter-network
+
+  front:
+    container_name: lotter-front
+    image: lotter/front-nginx
+    build: ./front-nginx
+    ports:
+      - 8000:80
+    networks:
+      - lotter-network
+
+networks:
+  lotter-network:
+    name: lotter-network

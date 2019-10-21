@@ -1,0 +1,17 @@
+POST http://localhost:8081/juggler/api/estimate
+Content-Type: application/json
+
+{
+  "strategies": ["RAREST_EQUAL_DISTRIBUTION", "RAREST", "MOST_COMMON", "RAREST_MOST_COMMON_MIXED"]
+}
+
+###
+
+POST http://localhost:8081/juggler/api/estimate
+Content-Type: application/json
+
+{
+  "strategies": ["RAREST_EQUAL_DISTRIBUTION","MOST_COMMON_EQUAL_DISTRIBUTION"]
+}
+
+###

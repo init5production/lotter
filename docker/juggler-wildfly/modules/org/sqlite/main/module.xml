@@ -1,0 +1,5 @@
+<module name="org.sqlite" xmlns="urn:jboss:module:1.6">
+    <resources>
+        <resource-root path="sqlite-jdbc-3.27.2.1.jar"/>
+    </resources>
+</module>
