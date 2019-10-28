@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * @author Jakub Barski
@@ -36,7 +35,7 @@ public class CollectionProviderForTest {
             int max = 8 * i;
             collection.add(
                     IntStream.rangeClosed(max - 7, max)
-                            .mapToObj(j -> NumberGrouped.valueOf(j, j))
+                            .mapToObj(j -> new NumberGrouped(j, (long) j))
                             .collect(Collectors.toList())
             );
         }

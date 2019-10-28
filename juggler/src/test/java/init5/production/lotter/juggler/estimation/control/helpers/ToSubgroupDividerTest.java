@@ -1,14 +1,12 @@
 package init5.production.lotter.juggler.estimation.control.helpers;
 
 import init5.production.lotter.juggler.crud.entity.NumberGrouped;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Jakub Barski
@@ -53,7 +51,7 @@ class ToSubgroupDividerTest {
         List<NumberGrouped> toDivide = new ArrayList<>();
 
         for(int number : numbers) {
-            toDivide.add(NumberGrouped.valueOf(new Object[]{number, (long)number}));
+            toDivide.add(new NumberGrouped(number, (long) number));
         }
 
         return toDivide;

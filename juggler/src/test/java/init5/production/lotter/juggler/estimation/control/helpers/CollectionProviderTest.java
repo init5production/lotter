@@ -16,8 +16,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 /**
@@ -46,7 +48,7 @@ class CollectionProviderTest {
     void setUp() {
         when(numberManager.findAllGrouped()).thenReturn(
                 IntStream.rangeClosed(1, 49)
-                        .mapToObj(i -> NumberGrouped.valueOf(i, (long) i))
+                        .mapToObj(i -> new NumberGrouped(i, (long) i))
                         .collect(Collectors.toList())
         );
     }

@@ -1,13 +1,10 @@
 package init5.production.lotter.juggler.crud.entity;
 
-import init5.production.lotter.juggler.crud.entity.query.NumberGroupedSelect;
-
 import javax.persistence.*;
 
 /**
  * @author Jakub Barski
  */
-@NamedQuery(name = NumberGroupedSelect.NAME, query = NumberGroupedSelect.QUERY)
 @Entity
 public class Number {
     private static final String SEQUENCE = "NUMBER_ID_SEQ";

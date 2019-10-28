@@ -4,7 +4,6 @@ import init5.production.lotter.juggler.crud.boundary.DrawManager;
 import init5.production.lotter.juggler.crud.entity.Draw;
 import init5.production.lotter.juggler.crud.entity.Number;
 import init5.production.lotter.juggler.crud.entity.NumberGrouped;
-import init5.production.lotter.juggler.estimation.control.helpers.Eliminator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,10 +56,10 @@ class EliminatorTest {
     @Test
     void discardGroupedNumbersFromLastDraws() {
         List<NumberGrouped> collection = new ArrayList<>();
-        collection.add(NumberGrouped.valueOf(1, 1L));
-        collection.add(NumberGrouped.valueOf(2, 1L));
-        collection.add(NumberGrouped.valueOf(3, 1L));
-        collection.add(NumberGrouped.valueOf(4, 1L));
+        collection.add(new NumberGrouped(1, 1L));
+        collection.add(new NumberGrouped(2, 1L));
+        collection.add(new NumberGrouped(3, 1L));
+        collection.add(new NumberGrouped(4, 1L));
 
         List<NumberGrouped> narrowedCollection = sut.discardGroupedNumbersFromLastDraws(collection, 1);
 

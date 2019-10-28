@@ -9,20 +9,9 @@ public class NumberGrouped {
 
     private Long hits;
 
-    public static NumberGrouped valueOf(Object[] init) {
-        if (!(init[0] instanceof Integer)) {
-            throw new IllegalArgumentException("First item of init array has to be an Integer!");
-        }
-
-        if (!(init[1] instanceof Long)) {
-            throw new IllegalArgumentException("Second item of init array has to be a Long!");
-        }
-
-        return NumberGrouped.valueOf((Integer) init[0], (Long) init[1]);
-    }
-
-    public static NumberGrouped valueOf(int number, long hits) {
-        return new NumberGrouped().setValue(number).setHits(hits);
+    public NumberGrouped(Integer value, Long hits) {
+        this.value = value;
+        this.hits = hits;
     }
 
     public Integer getValue() {
