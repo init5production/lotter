@@ -4,7 +4,8 @@ import init5.production.lotter.juggler.estimation.control.CollectionProviderForT
 import init5.production.lotter.juggler.estimation.control.estimators.BasicEstimator;
 import init5.production.lotter.juggler.estimation.control.helpers.CollectionProvider;
 import init5.production.lotter.juggler.estimation.entity.EstimationException;
-import org.junit.jupiter.api.BeforeEach;
+import init5.production.lotter.juggler.estimation.entity.StrategyType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -15,10 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static init5.production.lotter.juggler.crud.entity.Draw.NUMBERS_IN_DRAW;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,7 +42,10 @@ class MostCommonStrategyTest {
         List<Integer> collection = CollectionProviderForTest.getMostCommonNarrowed(6);
         when(provider.getMostCommonNarrowed(anyLong(), anyInt())).thenReturn(collection);
 
-        assertArrayEquals(new int[]{44, 45, 46, 47, 48, 49}, sut.estimate());
+        ImmutablePair<StrategyType, int[]> estimated = sut.estimate();
+
+        assertEquals(StrategyType.MOST_COMMON, estimated.getLeft());
+        assertArrayEquals(new int[]{44, 45, 46, 47, 48, 49}, estimated.getRight());
 
         verify(provider).getMostCommonNarrowed(15, 2);
         verify(estimator).estimate(collection, 6);
@@ -53,9 +56,10 @@ class MostCommonStrategyTest {
         List<Integer> collection = CollectionProviderForTest.getMostCommonNarrowed(15);
         when(provider.getMostCommonNarrowed(anyLong(), anyInt())).thenReturn(collection);
 
-        int[] estimated = sut.estimate();
+        ImmutablePair<StrategyType, int[]> estimated = sut.estimate();
 
-        assertTrue(IntStream.of(estimated).allMatch(i -> i >=  34));
+        assertEquals(StrategyType.MOST_COMMON, estimated.getLeft());
+        assertTrue(IntStream.of(estimated.getRight()).allMatch(i -> i >= 34));
 
         verify(provider).getMostCommonNarrowed(15, 2);
         verify(estimator).estimate(collection, 6);

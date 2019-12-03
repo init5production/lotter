@@ -5,8 +5,10 @@ import init5.production.lotter.juggler.estimation.control.helpers.CollectionProv
 import init5.production.lotter.juggler.estimation.entity.EstimationException;
 import init5.production.lotter.juggler.estimation.entity.StrategyQualifier;
 import init5.production.lotter.juggler.estimation.entity.StrategyType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -26,17 +28,20 @@ public class RarestMostCommonMixStrategy implements Strategy {
     @Inject
     private BasicEstimator estimator;
 
+    @Transactional(Transactional.TxType.REQUIRED)
     @Override
-    public int[] estimate() throws EstimationException {
+    public ImmutablePair<StrategyType, int[]> estimate() throws EstimationException {
         List<Integer> rarest = provider.getRarestNarrowed(COLLECTION_SIZE, DRAWS_TO_ELIMINATE);
         List<Integer> mostCommon = provider.getMostCommonNarrowed(COLLECTION_SIZE, DRAWS_TO_ELIMINATE);
 
-        return IntStream
+        int[] numbers = IntStream
                 .concat(
                         IntStream.of(estimator.estimate(rarest, HALF_OF_NUMBERS_IN_DRAW)),
                         IntStream.of(estimator.estimate(mostCommon, HALF_OF_NUMBERS_IN_DRAW))
                 )
                 .sorted()
                 .toArray();
+
+        return ImmutablePair.of(StrategyType.RAREST_MOST_COMMON_MIXED, numbers);
     }
 }

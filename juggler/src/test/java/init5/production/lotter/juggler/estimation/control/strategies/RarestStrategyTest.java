@@ -4,7 +4,8 @@ import init5.production.lotter.juggler.estimation.control.CollectionProviderForT
 import init5.production.lotter.juggler.estimation.control.estimators.BasicEstimator;
 import init5.production.lotter.juggler.estimation.control.helpers.CollectionProvider;
 import init5.production.lotter.juggler.estimation.entity.EstimationException;
-import org.junit.jupiter.api.BeforeEach;
+import init5.production.lotter.juggler.estimation.entity.StrategyType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -15,9 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +42,10 @@ class RarestStrategyTest {
         List<Integer> collection = CollectionProviderForTest.getRarestNarrowed(6);
         when(provider.getRarestNarrowed(anyLong(), anyInt())).thenReturn(collection);
 
-        assertArrayEquals(new int[]{1, 2, 3, 4, 5, 6}, sut.estimate());
+        ImmutablePair<StrategyType, int[]> estimated = sut.estimate();
+
+        assertEquals(StrategyType.RAREST, estimated.getLeft());
+        assertArrayEquals(new int[]{1, 2, 3, 4, 5, 6}, estimated.getRight());
 
         verify(provider).getRarestNarrowed(15, 2);
         verify(estimator).estimate(collection, 6);
@@ -52,9 +56,10 @@ class RarestStrategyTest {
         List<Integer> collection = CollectionProviderForTest.getRarestNarrowed(15);
         when(provider.getRarestNarrowed(anyLong(), anyInt())).thenReturn(collection);
 
-        int[] estimated = sut.estimate();
+        ImmutablePair<StrategyType, int[]> estimated = sut.estimate();
 
-        assertTrue(IntStream.of(estimated).allMatch(i -> i <=  15));
+        assertEquals(StrategyType.RAREST, estimated.getLeft());
+        assertTrue(IntStream.of(estimated.getRight()).allMatch(i -> i <= 15));
 
         verify(provider).getRarestNarrowed(15, 2);
         verify(estimator).estimate(collection, 6);

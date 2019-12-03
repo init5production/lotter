@@ -1,19 +1,16 @@
 package init5.production.lotter.juggler.estimation.control.strategies;
 
-import init5.production.lotter.juggler.crud.boundary.NumberManager;
 import init5.production.lotter.juggler.crud.entity.NumberGrouped;
 import init5.production.lotter.juggler.estimation.control.estimators.SubgroupBasedEstimator;
 import init5.production.lotter.juggler.estimation.control.helpers.CollectionProvider;
-import init5.production.lotter.juggler.estimation.control.helpers.Eliminator;
-import init5.production.lotter.juggler.estimation.control.helpers.ToSubgroupDivider;
-import init5.production.lotter.juggler.estimation.control.strategies.Strategy;
 import init5.production.lotter.juggler.estimation.entity.EstimationException;
 import init5.production.lotter.juggler.estimation.entity.StrategyQualifier;
 import init5.production.lotter.juggler.estimation.entity.StrategyType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author Jakub Barski
@@ -29,11 +26,14 @@ public class RarestEqualDistributionStrategy implements Strategy {
     @Inject
     private SubgroupBasedEstimator estimator;
 
+    @Transactional(Transactional.TxType.REQUIRED)
     @Override
-    public int[] estimate() throws EstimationException {
-        return estimator.estimate(
+    public ImmutablePair<StrategyType, int[]> estimate() throws EstimationException {
+        int[] numbers = estimator.estimate(
                 provider.getNarrowedInSubgroups(DRAWS_TO_ELIMINATE),
                 Comparator.comparingLong(NumberGrouped::getHits)
         );
+
+        return ImmutablePair.of(StrategyType.RAREST_EQUAL_DISTRIBUTION, numbers);
     }
 }

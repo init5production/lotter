@@ -4,6 +4,8 @@ import init5.production.lotter.juggler.estimation.control.CollectionProviderForT
 import init5.production.lotter.juggler.estimation.control.estimators.BasicEstimator;
 import init5.production.lotter.juggler.estimation.control.helpers.CollectionProvider;
 import init5.production.lotter.juggler.estimation.entity.EstimationException;
+import init5.production.lotter.juggler.estimation.entity.StrategyType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -13,7 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -42,7 +45,11 @@ class RarestMostCommonMixStrategyTest {
         when(provider.getRarestNarrowed(anyLong(), anyInt())).thenReturn(rarestCollection);
         when(provider.getMostCommonNarrowed(anyLong(), anyInt())).thenReturn(mostCommonCollection);
 
-        assertArrayEquals(new int[]{1,2,3,47,48,49}, sut.estimate());
+
+        ImmutablePair<StrategyType, int[]> estimated = sut.estimate();
+
+        assertEquals(StrategyType.RAREST_MOST_COMMON_MIXED, estimated.getLeft());
+        assertArrayEquals(new int[]{1, 2, 3, 47, 48, 49}, estimated.getRight());
 
         verify(provider).getRarestNarrowed(7, 2);
         verify(provider).getMostCommonNarrowed(7, 2);

@@ -1,7 +1,6 @@
 package init5.production.lotter.juggler.http.boundary;
 
 import init5.production.lotter.juggler.estimation.boundary.EstimationFacade;
-import init5.production.lotter.juggler.estimation.entity.EstimationException;
 import init5.production.lotter.juggler.estimation.entity.StrategyType;
 import init5.production.lotter.juggler.http.entity.EstimateRequest;
 import init5.production.lotter.juggler.http.entity.EstimateResponse;
@@ -47,13 +46,8 @@ public class EstimateResource {
 
     @POST
     public Response estimate(@Valid @NotNull EstimateRequest request) {
-        try {
-            HashMap<StrategyType, int[]> estimated = estimationFacade.estimate(request.getStrategies());
+        HashMap<StrategyType, int[]> estimated = estimationFacade.estimate(request.getStrategies());
 
-            return Response.ok(new EstimateResponse().setEstimated(estimated)).build();
-        } catch (EstimationException e) {
-            LOGGER.error(e.getClass().getSimpleName() + ": " + e.getMessage());
-            return Response.serverError().build();
-        }
+        return Response.ok(new EstimateResponse().setEstimated(estimated)).build();
     }
 }

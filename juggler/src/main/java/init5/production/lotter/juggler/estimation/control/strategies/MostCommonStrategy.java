@@ -5,8 +5,10 @@ import init5.production.lotter.juggler.estimation.control.helpers.CollectionProv
 import init5.production.lotter.juggler.estimation.entity.EstimationException;
 import init5.production.lotter.juggler.estimation.entity.StrategyQualifier;
 import init5.production.lotter.juggler.estimation.entity.StrategyType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import static init5.production.lotter.juggler.crud.entity.Draw.NUMBERS_IN_DRAW;
 
@@ -25,11 +27,14 @@ public class MostCommonStrategy implements Strategy {
     @Inject
     private BasicEstimator estimator;
 
+    @Transactional(Transactional.TxType.REQUIRED)
     @Override
-    public int[] estimate() throws EstimationException {
-        return estimator.estimate(
+    public ImmutablePair<StrategyType, int[]> estimate() throws EstimationException {
+        int[] numbers = estimator.estimate(
                 provider.getMostCommonNarrowed(COLLECTION_SIZE, DRAWS_TO_ELIMINATE),
                 NUMBERS_IN_DRAW
         );
+
+        return ImmutablePair.of(StrategyType.MOST_COMMON, numbers);
     }
 }
